@@ -16,3 +16,9 @@ npm run build
 ```
 
 The Vite config uses a relative asset base, so the `dist` directory works from a GitHub Pages project subpath.
+
+## GitHub Pages
+
+The included GitHub Actions workflow builds and deploys the `dist` directory whenever `main` is pushed.
+
+In the repository, open **Settings → Pages** and set **Source** to **GitHub Actions**.

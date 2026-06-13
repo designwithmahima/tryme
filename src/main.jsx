@@ -264,7 +264,7 @@ function App() {
           <div className="section-tag">03 / BUILT WITH INTENT</div>
           <h2>A LITTLE TECH.<br/>A LOT OF <i>YOU.</i></h2>
           <p>The interface stays playful, direct and human. Every interaction moves you closer to an outfit, never deeper into a menu.</p>
-          <a href="/design-study.webp" target="_blank">VIEW ORIGINAL DESIGN STUDY <ArrowUpRight size={17}/></a>
+          <a href={`${import.meta.env.BASE_URL}design-study.webp`} target="_blank">VIEW ORIGINAL DESIGN STUDY <ArrowUpRight size={17}/></a>
         </div>
       </section>
 
