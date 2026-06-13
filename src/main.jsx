@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronRight, Download, Heart, Menu, ShoppingBag, Sparkles, WandSparkles, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronRight, Download, Heart, Menu, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { registerSW } from 'virtual:pwa-register'
 import './styles.css'
 
@@ -53,35 +53,77 @@ const shopLooks = [
   },
 ]
 
-function Phone({ look, loading, onGenerate }) {
+const DESIGN_STUDY_URL = 'https://www.behance.net/gallery/248535429/Get-ready-in-3-second'
+
+function DeviceFrame({ className, children }) {
   return (
-    <div className="phone-wrap">
-      <div className="phone">
-        <div className="phone-screen">
-          <div className="island" />
-          <div className="phone-top">
-            <span>9:41</span><span>•••</span>
-          </div>
-          <div className="phone-brand">Dress Me <i>AI</i></div>
-          <div className={`look-image ${loading ? 'is-loading' : ''}`}>
-            <img src={look.image} alt={look.title} />
-            <div className="look-shade" />
-            {loading && <div className="scan-line" />}
-          </div>
-          <div className="look-copy">
-            <small>{loading ? 'READING YOUR MOOD...' : look.label}</small>
-            <strong>{loading ? 'Styling...' : look.title}</strong>
-            <span>{loading ? 'Just a second.' : look.detail}</span>
-          </div>
-          <button className="generate" onClick={onGenerate} disabled={loading}>
-            <WandSparkles size={17} />
-            {loading ? 'Creating look' : 'Style me again'}
-          </button>
-          <div className="phone-nav"><span>Home</span><Heart size={18}/><Sparkles size={18}/></div>
+    <div className={`demo-device ${className}`}>
+      <div className="demo-device-edge">
+        <div className="demo-device-screen">
+          <div className="demo-notch" />
+          <div className="demo-status"><span>9:41</span><span>●●●</span></div>
+          {children}
         </div>
       </div>
-      <div className="orbit orbit-one">AI</div>
-      <div className="orbit orbit-two"><Heart size={16} fill="currentColor"/></div>
+    </div>
+  )
+}
+
+function PhoneShowcase({ look, loading, onGenerate }) {
+  const categories = [
+    ['Office', 'Linen blazer'],
+    ['Casual', 'Denim'],
+    ['Party', 'One piece dress'],
+    ['Dinner', 'Skirt & top'],
+  ]
+
+  return (
+    <div className="phone-showcase">
+      <DeviceFrame className="welcome-device">
+        <div className="welcome-brand">Dress Me <i>AI</i><small>GET READY IN 3 SECONDS</small></div>
+        <img className="welcome-model" src={looks[0].image} alt="" />
+        <button onClick={onGenerate}>Get Started</button>
+      </DeviceFrame>
+
+      <DeviceFrame className="dashboard-device">
+        <div className="dashboard-head">
+          <span>Good Morning Mahima!</span>
+          <small>Delhi 28°C</small>
+        </div>
+        <div className="ready-card">
+          <Sparkles size={18}/>
+          <strong>GET READY IN 3 SECONDS</strong>
+          <span>Let AI curate your perfect look based on today's events and weather.</span>
+          <button onClick={onGenerate}>Start Styling</button>
+        </div>
+        <div className="suggestion-title"><b>Today's Suggestion</b><span>View closet</span></div>
+        <div className="category-list">
+          {categories.map(([title, detail]) => (
+            <div key={title}><span className="category-thumb"/><p><b>{title}</b><small>{detail}</small></p><ChevronRight size={12}/></div>
+          ))}
+        </div>
+        <div className="dashboard-nav"><Heart size={13}/><span><Sparkles size={15}/></span><ShoppingBag size={13}/></div>
+      </DeviceFrame>
+
+      <DeviceFrame className="result-device">
+        <div className="result-head">
+          <span>←</span><p>Dress Me AI<small>CURATED FOR YOU</small></p><Heart size={13}/>
+        </div>
+        <h3>{loading ? 'Creating your look...' : "Today's Best Look"}</h3>
+        <div className={`result-look ${loading ? 'is-loading' : ''}`}>
+          <img src={look.image} alt={look.title}/>
+          {loading && <div className="scan-line"/>}
+          <span className="look-chip chip-one">✦</span>
+          <span className="look-chip chip-two">▱</span>
+        </div>
+        <div className="result-actions">
+          <button onClick={onGenerate} disabled={loading}>{loading ? 'Styling...' : 'Regenerate'}</button>
+          <button><Heart size={11}/> Save look</button>
+        </div>
+      </DeviceFrame>
+
+      <div className="demo-orbit demo-orbit-one">AI</div>
+      <div className="demo-orbit demo-orbit-two"><Heart size={15} fill="currentColor"/></div>
     </div>
   )
 }
@@ -95,6 +137,8 @@ function App() {
   const [isInstalled, setIsInstalled] = useState(false)
   const [isIos, setIsIos] = useState(false)
   const [showIosInstall, setShowIosInstall] = useState(false)
+  const [showRedirect, setShowRedirect] = useState(false)
+  const [redirectCount, setRedirectCount] = useState(3)
 
   const generate = () => {
     if (loading) return
@@ -177,6 +221,34 @@ function App() {
     setMenuOpen(false)
   }
 
+  useEffect(() => {
+    if (!showRedirect) return
+    if (redirectCount === 0) {
+      window.open(DESIGN_STUDY_URL, '_blank', 'noopener,noreferrer')
+      setShowRedirect(false)
+      setRedirectCount(3)
+      return
+    }
+
+    const timer = window.setTimeout(() => setRedirectCount((current) => current - 1), 1000)
+    return () => window.clearTimeout(timer)
+  }, [showRedirect, redirectCount])
+
+  const startRedirect = () => {
+    setRedirectCount(3)
+    setShowRedirect(true)
+  }
+
+  const cancelRedirect = () => {
+    setShowRedirect(false)
+    setRedirectCount(3)
+  }
+
+  const openDesignStudy = () => {
+    window.open(DESIGN_STUDY_URL, '_blank', 'noopener,noreferrer')
+    cancelRedirect()
+  }
+
   const scrollShop = (direction) => {
     document.querySelector('.shop-track')?.scrollBy({
       left: direction * Math.min(window.innerWidth * 0.75, 520),
@@ -211,6 +283,21 @@ function App() {
           <div><strong>Install Dress Me AI</strong><span>In Safari, tap Share, then choose “Add to Home Screen.”</span></div>
         </aside>
       )}
+      {showRedirect && (
+        <div className="redirect-backdrop" role="presentation" onMouseDown={cancelRedirect}>
+          <section className="redirect-dialog" role="dialog" aria-modal="true" aria-labelledby="redirect-title" onMouseDown={(event) => event.stopPropagation()}>
+            <button className="redirect-close" aria-label="Cancel redirect" onClick={cancelRedirect}><X size={19}/></button>
+            <div className="redirect-count" aria-live="polite">{redirectCount}</div>
+            <small>LEAVING DRESS ME AI</small>
+            <h2 id="redirect-title">OPENING THE ORIGINAL<br/><i>DESIGN STUDY.</i></h2>
+            <p>You’ll be redirected to Mahima Gupta’s project on Behance in {redirectCount} {redirectCount === 1 ? 'second' : 'seconds'}.</p>
+            <div className="redirect-actions">
+              <button onClick={cancelRedirect}>CANCEL</button>
+              <button onClick={openDesignStudy}>OPEN NOW <ArrowUpRight size={16}/></button>
+            </div>
+          </section>
+        </div>
+      )}
 
       <section className="hero" id="top">
         <div className="noise" />
@@ -225,7 +312,7 @@ function App() {
         </div>
         <div className="hero-visual">
           <div className="three">{loading ? count : '3'}</div>
-          <Phone look={look} loading={loading} onGenerate={generate} />
+          <PhoneShowcase look={look} loading={loading} onGenerate={generate} />
           <div className="seconds">SECONDS<br/><span>TO FEEL GOOD</span></div>
         </div>
         <a href="#how" className="scroll">SCROLL TO DISCOVER <ArrowDown size={16}/></a>
@@ -316,7 +403,7 @@ function App() {
           <div className="section-tag">03 / BUILT WITH INTENT</div>
           <h2>A LITTLE TECH.<br/>A LOT OF <i>YOU.</i></h2>
           <p>The interface stays playful, direct and human. Every interaction moves you closer to an outfit, never deeper into a menu.</p>
-          <a href={`${import.meta.env.BASE_URL}design-study.webp`} target="_blank">VIEW ORIGINAL DESIGN STUDY <ArrowUpRight size={17}/></a>
+          <button className="study-link" onClick={startRedirect}>VIEW ORIGINAL DESIGN STUDY <ArrowUpRight size={17}/></button>
         </div>
       </section>
 
