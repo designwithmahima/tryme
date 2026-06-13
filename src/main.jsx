@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BatteryFull, Check, ChevronRight, Download, Heart, Menu, Shirt, ShoppingBag, Signal, Sparkles, Wifi, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BatteryFull, CalendarDays, Check, ChevronRight, CloudSun, Download, Heart, Info, Menu, Share2, Shirt, ShoppingBag, Signal, Sparkles, Wifi, X } from 'lucide-react'
 import { registerSW } from 'virtual:pwa-register'
 import './styles.css'
 
@@ -84,6 +84,8 @@ function DeviceFrame({ className, children }) {
 function InteractivePhone({ look, loading, onGenerate }) {
   const [screen, setScreen] = useState('welcome')
   const [saved, setSaved] = useState(false)
+  const [liked, setLiked] = useState(false)
+  const [detailsOpen, setDetailsOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('Office')
   const categories = [
     ['Office', 'Linen blazer'],
@@ -99,6 +101,7 @@ function InteractivePhone({ look, loading, onGenerate }) {
   const startStyling = () => {
     setScreen('result')
     setSaved(false)
+    setDetailsOpen(false)
     onGenerate()
   }
 
@@ -112,8 +115,14 @@ function InteractivePhone({ look, loading, onGenerate }) {
       <DeviceFrame className={`interactive-device screen-${screen}`}>
         {screen === 'welcome' && (
           <div className="app-welcome">
-            <div className="welcome-brand">Dress Me <i>AI</i><small>GET READY IN 3 SECONDS</small></div>
-            <img className="welcome-model" src={`${import.meta.env.BASE_URL}assets/app/welcome-model.webp`} alt="Original Dress Me AI welcome model" />
+            <div className="welcome-header">
+              <div className="welcome-brand">Dress Me <i>AI</i></div>
+              <small>YOUR PERSONAL AI STYLIST</small>
+            </div>
+            <div className="welcome-model-wrap">
+              <img className="welcome-model" src={`${import.meta.env.BASE_URL}assets/app/welcome-model.webp`} alt="Original Dress Me AI welcome model" />
+            </div>
+            <div className="welcome-promise"><Sparkles size={12}/><span>YOUR LOOK, READY IN 3 SECONDS</span></div>
             <button onClick={() => setScreen('dashboard')}>Get Started</button>
           </div>
         )}
@@ -149,15 +158,32 @@ function InteractivePhone({ look, loading, onGenerate }) {
             <div className="result-head">
               <button aria-label="Back to suggestions" onClick={() => setScreen('dashboard')}>←</button>
               <p>Dress Me AI<small>CURATED FOR YOU</small></p>
-              <Heart size={16}/>
+              <div className="result-head-actions">
+                <button aria-label="Share look"><Share2 size={14}/></button>
+                <button className={liked ? 'liked' : ''} aria-label="Like look" onClick={() => setLiked(!liked)}><Heart size={15} fill={liked ? 'currentColor' : 'none'}/></button>
+              </div>
             </div>
-            <h3>{loading ? 'Creating your look...' : "Today's Best Look"}</h3>
+            <div className="result-title-row">
+              <div><small>{selectedCategory} EDIT</small><h3>{loading ? 'Creating your look...' : "Today's Best Look"}</h3></div>
+              <span className="match-score">96% MATCH</span>
+            </div>
+            <div className="result-context">
+              <span><CloudSun size={12}/> 28°C Sunny</span>
+              <span><CalendarDays size={12}/> Evening plans</span>
+            </div>
             <div className={`result-look ${loading ? 'is-loading' : ''}`}>
               <img src={look.image} alt={look.title}/>
               {loading && <div className="scan-line"/>}
               <span className="look-chip chip-one">✦</span>
-              <span className="look-chip chip-two">▱</span>
+              <button className="look-chip chip-two" aria-label="Show outfit details" onClick={() => setDetailsOpen(!detailsOpen)}><Info size={14}/></button>
               {!loading && <div className="result-label"><small>{look.label}</small><strong>{look.title}</strong></div>}
+              {detailsOpen && (
+                <div className="outfit-sheet">
+                  <div><span className="swatch swatch-one"/><p><b>Main piece</b><small>Tailored silhouette</small></p></div>
+                  <div><span className="swatch swatch-two"/><p><b>Accessories</b><small>Warm metallic accents</small></p></div>
+                  <div><span className="swatch swatch-three"/><p><b>Why it works</b><small>Balanced for your plans</small></p></div>
+                </div>
+              )}
             </div>
             <div className="result-actions">
               <button onClick={onGenerate} disabled={loading}>{loading ? 'Styling...' : 'Regenerate'}</button>
