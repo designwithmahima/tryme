@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronRight, Download, Heart, Menu, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BatteryFull, Check, ChevronRight, Download, Heart, Menu, Shirt, ShoppingBag, Signal, Sparkles, Wifi, X } from 'lucide-react'
 import { registerSW } from 'virtual:pwa-register'
 import './styles.css'
 
@@ -8,24 +8,24 @@ registerSW({ immediate: true })
 
 const looks = [
   {
-    label: 'DOWNTOWN',
-    title: 'The Night Edit',
-    detail: 'Sharp, glossy, impossible to ignore.',
-    image: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=90',
+    label: 'OFFICE',
+    title: 'Soft Structure',
+    detail: 'Polished tailoring with a warm modern finish.',
+    image: `${import.meta.env.BASE_URL}assets/app/office-look.webp`,
     color: '#dc3e82',
   },
   {
-    label: 'OFF DUTY',
-    title: 'Soft Power',
-    detail: 'Relaxed tailoring with a clean finish.',
-    image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=90',
+    label: 'EVENING',
+    title: 'Berry After Dark',
+    detail: 'Satin, sharp lines, and effortless evening energy.',
+    image: `${import.meta.env.BASE_URL}assets/app/evening-look.webp`,
     color: '#f2a7c8',
   },
   {
-    label: 'WEEKEND',
-    title: 'Colour Theory',
-    detail: 'A bright mood, styled in one tap.',
-    image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=900&q=90',
+    label: 'POWER LOOK',
+    title: 'Midnight Tailoring',
+    detail: 'Confident monochrome for a statement arrival.',
+    image: `${import.meta.env.BASE_URL}assets/app/welcome-model.webp`,
     color: '#ef4b8f',
   },
 ]
@@ -56,12 +56,24 @@ const shopLooks = [
 const DESIGN_STUDY_URL = 'https://www.behance.net/gallery/248535429/Get-ready-in-3-second'
 
 function DeviceFrame({ className, children }) {
+  const [time, setTime] = useState('')
+
+  useEffect(() => {
+    const updateTime = () => setTime(new Intl.DateTimeFormat('en', { hour: 'numeric', minute: '2-digit' }).format(new Date()))
+    updateTime()
+    const timer = window.setInterval(updateTime, 30000)
+    return () => window.clearInterval(timer)
+  }, [])
+
   return (
     <div className={`demo-device ${className}`}>
       <div className="demo-device-edge">
         <div className="demo-device-screen">
           <div className="demo-notch" />
-          <div className="demo-status"><span>9:41</span><span>●●●</span></div>
+          <div className="demo-status">
+            <span>{time}</span>
+            <span className="status-icons"><Signal/><Wifi/><BatteryFull/></span>
+          </div>
           {children}
         </div>
       </div>
@@ -71,6 +83,8 @@ function DeviceFrame({ className, children }) {
 
 function InteractivePhone({ look, loading, onGenerate }) {
   const [screen, setScreen] = useState('welcome')
+  const [saved, setSaved] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState('Office')
   const categories = [
     ['Office', 'Linen blazer'],
     ['Casual', 'Denim'],
@@ -84,7 +98,13 @@ function InteractivePhone({ look, loading, onGenerate }) {
 
   const startStyling = () => {
     setScreen('result')
+    setSaved(false)
     onGenerate()
+  }
+
+  const chooseCategory = (category) => {
+    setSelectedCategory(category)
+    startStyling()
   }
 
   return (
@@ -93,7 +113,7 @@ function InteractivePhone({ look, loading, onGenerate }) {
         {screen === 'welcome' && (
           <div className="app-welcome">
             <div className="welcome-brand">Dress Me <i>AI</i><small>GET READY IN 3 SECONDS</small></div>
-            <img className="welcome-model" src={`${import.meta.env.BASE_URL}reference-hero.png`} alt="Mahima's original Dress Me AI model" />
+            <img className="welcome-model" src={`${import.meta.env.BASE_URL}assets/app/welcome-model.webp`} alt="Original Dress Me AI welcome model" />
             <button onClick={() => setScreen('dashboard')}>Get Started</button>
           </div>
         )}
@@ -101,8 +121,8 @@ function InteractivePhone({ look, loading, onGenerate }) {
         {screen === 'dashboard' && (
           <div className="app-dashboard">
             <div className="dashboard-head">
-              <span>Good Morning Mahima!</span>
-              <small>Delhi 28°C</small>
+              <div><span>Good Morning, Mahima!</span><small>Delhi · 28°C · Sunny</small></div>
+              <button aria-label="Profile">MG</button>
             </div>
             <div className="ready-card">
               <Sparkles size={24}/>
@@ -113,14 +133,14 @@ function InteractivePhone({ look, loading, onGenerate }) {
             <div className="suggestion-title"><b>Today's Suggestion</b><span>View closet</span></div>
             <div className="category-list">
               {categories.map(([title, detail], index) => (
-                <button key={title} onClick={startStyling}>
+                <button key={title} className={selectedCategory === title ? 'selected' : ''} onClick={() => chooseCategory(title)}>
                   <span className={`category-thumb category-${index + 1}`}/>
                   <p><b>{title}</b><small>{detail}</small></p>
                   <ChevronRight size={15}/>
                 </button>
               ))}
             </div>
-            <div className="dashboard-nav"><Heart size={17}/><span><Sparkles size={20}/></span><ShoppingBag size={17}/></div>
+            <div className="dashboard-nav"><button aria-label="Saved looks"><Heart size={17}/></button><button className="active" aria-label="AI stylist"><Sparkles size={20}/></button><button aria-label="Closet"><Shirt size={17}/></button></div>
           </div>
         )}
 
@@ -141,7 +161,7 @@ function InteractivePhone({ look, loading, onGenerate }) {
             </div>
             <div className="result-actions">
               <button onClick={onGenerate} disabled={loading}>{loading ? 'Styling...' : 'Regenerate'}</button>
-              <button><Heart size={14}/> Save look</button>
+              <button className={saved ? 'saved' : ''} onClick={() => setSaved(!saved)}><Heart size={14} fill={saved ? 'currentColor' : 'none'}/> {saved ? 'Saved' : 'Save look'}</button>
             </div>
           </div>
         )}
