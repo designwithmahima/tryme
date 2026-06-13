@@ -224,7 +224,7 @@ function App() {
   useEffect(() => {
     if (!showRedirect) return
     if (redirectCount === 0) {
-      window.open(DESIGN_STUDY_URL, '_blank', 'noopener,noreferrer')
+      window.location.assign(DESIGN_STUDY_URL)
       setShowRedirect(false)
       setRedirectCount(3)
       return
@@ -245,8 +245,7 @@ function App() {
   }
 
   const openDesignStudy = () => {
-    window.open(DESIGN_STUDY_URL, '_blank', 'noopener,noreferrer')
-    cancelRedirect()
+    window.location.assign(DESIGN_STUDY_URL)
   }
 
   const scrollShop = (direction) => {
