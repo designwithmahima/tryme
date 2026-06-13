@@ -495,12 +495,14 @@ function App() {
     setLoading(true)
     setCount(3)
     setPhoneRequest((current) => current + 1)
-    const isMobile = window.innerWidth <= 900;
-    if (isMobile) {
-      document.querySelector('.hero-visual')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      document.getElementById('top')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    setTimeout(() => {
+      const isMobile = window.innerWidth <= 900;
+      if (isMobile) {
+        document.querySelector('.hero-visual')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 100);
   }
 
   const look = featuredLook || looks[lookIndex]
