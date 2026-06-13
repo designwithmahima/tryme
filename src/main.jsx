@@ -34,22 +34,30 @@ const shopLooks = [
   {
     name: 'After Dark',
     mood: 'Night out',
-    image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=900&q=90',
+    label: 'NIGHT OUT',
+    detail: 'Sculptural tailoring for an elegant late-night entrance.',
+    image: `${import.meta.env.BASE_URL}assets/app/shop-after-dark.webp`,
   },
   {
     name: 'Soft Structure',
     mood: 'Work mode',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=900&q=90',
+    label: 'WORK MODE',
+    detail: 'Quiet luxury layers with effortless authority.',
+    image: `${import.meta.env.BASE_URL}assets/app/shop-soft-structure.webp`,
   },
   {
     name: 'Pink Energy',
     mood: 'Main character',
-    image: 'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=900&q=90',
+    label: 'MAIN CHARACTER',
+    detail: 'Joyful colour and a silhouette that owns the room.',
+    image: `${import.meta.env.BASE_URL}assets/app/shop-pink-energy.webp`,
   },
   {
     name: 'Street Smart',
     mood: 'Off duty',
-    image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=900&q=90',
+    label: 'OFF DUTY',
+    detail: 'Relaxed denim and leather with clean urban confidence.',
+    image: `${import.meta.env.BASE_URL}assets/app/shop-street-smart.webp`,
   },
 ]
 
@@ -81,7 +89,7 @@ function DeviceFrame({ className, children }) {
   )
 }
 
-function InteractivePhone({ look, loading, onGenerate }) {
+function InteractivePhone({ look, loading, onGenerate, requestId }) {
   const [screen, setScreen] = useState('welcome')
   const [saved, setSaved] = useState(false)
   const [liked, setLiked] = useState(false)
@@ -97,6 +105,13 @@ function InteractivePhone({ look, loading, onGenerate }) {
   useEffect(() => {
     if (loading) setScreen('result')
   }, [loading])
+
+  useEffect(() => {
+    if (!requestId) return
+    setScreen('result')
+    setSaved(false)
+    setDetailsOpen(false)
+  }, [requestId])
 
   const startStyling = () => {
     setScreen('result')
@@ -215,9 +230,12 @@ function App() {
   const [showIosInstall, setShowIosInstall] = useState(false)
   const [showRedirect, setShowRedirect] = useState(false)
   const [redirectCount, setRedirectCount] = useState(3)
+  const [featuredLook, setFeaturedLook] = useState(null)
+  const [phoneRequest, setPhoneRequest] = useState(0)
 
   const generate = () => {
     if (loading) return
+    setFeaturedLook(null)
     setLoading(true)
     setCount(3)
   }
@@ -331,7 +349,19 @@ function App() {
     })
   }
 
-  const look = looks[lookIndex]
+  const buildLook = (item) => {
+    setFeaturedLook({
+      label: item.label,
+      title: item.name,
+      detail: item.detail,
+      image: item.image,
+      color: '#ef4b8f',
+    })
+    setPhoneRequest((current) => current + 1)
+    document.getElementById('top')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const look = featuredLook || looks[lookIndex]
 
   return (
     <main>
@@ -387,7 +417,7 @@ function App() {
         </div>
         <div className="hero-visual">
           <div className="three">{loading ? count : '3'}</div>
-          <InteractivePhone look={look} loading={loading} onGenerate={generate} />
+          <InteractivePhone look={look} loading={loading} onGenerate={generate} requestId={phoneRequest} />
           <div className="seconds">SECONDS<br/><span>TO FEEL GOOD</span></div>
         </div>
         <a href="#how" className="scroll">SCROLL TO DISCOVER <ArrowDown size={16}/></a>
@@ -444,7 +474,7 @@ function App() {
                 <img src={item.image} alt={item.name} />
                 <span>0{index + 1}</span>
                 <button aria-label={`Save ${item.name}`}><Heart size={18}/></button>
-                <div className="quick-view"><ShoppingBag size={16}/> BUILD THIS LOOK</div>
+                <button className="quick-view" onClick={() => buildLook(item)}><ShoppingBag size={16}/> BUILD THIS LOOK</button>
               </div>
               <div className="product-info">
                 <div><small>{item.mood}</small><h3>{item.name}</h3></div>
