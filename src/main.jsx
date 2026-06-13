@@ -528,7 +528,7 @@ function App() {
       {showRedirect && (
         <div className="redirect-backdrop" role="presentation" onMouseDown={cancelRedirect}>
           <section className="redirect-dialog" role="dialog" aria-modal="true" aria-labelledby="redirect-title" onMouseDown={(event) => event.stopPropagation()}>
-            <div className="redirect-dialog-grommets"><span></span><span></span></div>
+            <div className="redirect-dialog-hanger"><div className="hanger-hook"></div><div className="hanger-body"></div></div>
             <button className="redirect-close" aria-label="Cancel redirect" onClick={cancelRedirect}><X size={19}/></button>
             <div className="redirect-count" aria-live="polite">{redirectCount}</div>
             <small>LEAVING DRESS ME AI</small>
