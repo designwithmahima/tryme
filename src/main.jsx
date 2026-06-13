@@ -93,6 +93,8 @@ function App() {
   const [count, setCount] = useState(3)
   const [installPrompt, setInstallPrompt] = useState(null)
   const [isInstalled, setIsInstalled] = useState(false)
+  const [isIos, setIsIos] = useState(false)
+  const [showIosInstall, setShowIosInstall] = useState(false)
 
   const generate = () => {
     if (loading) return
@@ -143,6 +145,7 @@ function App() {
   useEffect(() => {
     const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone
     setIsInstalled(Boolean(standalone))
+    setIsIos(/iphone|ipad|ipod/i.test(window.navigator.userAgent))
 
     const captureInstallPrompt = (event) => {
       event.preventDefault()
@@ -162,6 +165,11 @@ function App() {
   }, [])
 
   const installApp = async () => {
+    if (isIos && !installPrompt) {
+      setShowIosInstall(true)
+      setMenuOpen(false)
+      return
+    }
     if (!installPrompt) return
     await installPrompt.prompt()
     await installPrompt.userChoice
@@ -187,7 +195,7 @@ function App() {
           <a href="#how" onClick={() => setMenuOpen(false)}>How it works</a>
           <a href="#story" onClick={() => setMenuOpen(false)}>The story</a>
           <a href="#credits" onClick={() => setMenuOpen(false)}>Credits</a>
-          {installPrompt && !isInstalled && (
+          {(installPrompt || isIos) && !isInstalled && (
             <button className="install-button" onClick={installApp}><Download size={16}/> Install app</button>
           )}
           <button className="nav-cta" onClick={() => { setMenuOpen(false); generate() }}>TRY THE MAGIC <ArrowUpRight size={15}/></button>
@@ -196,6 +204,13 @@ function App() {
           {menuOpen ? <X /> : <Menu />}
         </button>
       </header>
+      {showIosInstall && (
+        <aside className="ios-install-tip" role="dialog" aria-label="Install Dress Me AI">
+          <button aria-label="Close install instructions" onClick={() => setShowIosInstall(false)}><X size={18}/></button>
+          <Download size={22}/>
+          <div><strong>Install Dress Me AI</strong><span>In Safari, tap Share, then choose “Add to Home Screen.”</span></div>
+        </aside>
+      )}
 
       <section className="hero" id="top">
         <div className="noise" />
