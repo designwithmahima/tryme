@@ -366,13 +366,11 @@ function App() {
   const [featuredLook, setFeaturedLook] = useState(null)
   const [phoneRequest, setPhoneRequest] = useState(0)
   const [buildingItemId, setBuildingItemId] = useState(null)
-  const [activeWardrobeItemId, setActiveWardrobeItemId] = useState(null)
 
   const generate = () => {
     if (loading) return
     setFeaturedLook(null)
     setBuildingItemId(null)
-    setActiveWardrobeItemId(null)
     setLoading(true)
     setCount(3)
   }
@@ -492,7 +490,6 @@ function App() {
 
   const buildLook = (item) => {
     if (loading) return
-    setActiveWardrobeItemId(item.id)
     setBuildingItemId(item.id)
     setFeaturedLook(item.matchingOutfit)
     setLoading(true)
@@ -563,7 +560,7 @@ function App() {
             loading={loading} 
             onGenerate={generate} 
             requestId={phoneRequest} 
-            sourceItem={wardrobeItems.find(x => x.id === activeWardrobeItemId)} 
+            sourceItem={wardrobeItems.find(x => x.id === buildingItemId)} 
           />
           <div className="seconds">SECONDS<br/><span>TO FEEL GOOD</span></div>
         </div>
@@ -617,25 +614,20 @@ function App() {
         <div className="shop-track">
           {wardrobeItems.map((item, index) => {
             const isBuilding = buildingItemId === item.id;
-            const isActive = activeWardrobeItemId === item.id;
             return (
-              <article className={`product-card reveal ${isBuilding ? 'building' : ''} ${isActive ? 'active' : ''}`} key={item.id}>
+              <article className={`product-card reveal ${isBuilding ? 'building' : ''}`} key={item.id}>
                 <div className="product-image">
                   <img src={item.image} alt={item.name} />
                   <span>0{index + 1}</span>
                   <button aria-label={`Save ${item.name}`}><Heart size={18}/></button>
                   <button 
-                    className={`quick-view ${isBuilding ? 'is-building' : ''} ${isActive ? 'is-active' : ''}`} 
+                    className={`quick-view ${isBuilding ? 'is-building' : ''}`} 
                     onClick={() => buildLook(item)}
                     disabled={loading}
                   >
                     {isBuilding ? (
                       <>
                         <Sparkles size={16} className="animate-spin" style={{ animation: 'spin 1.5s linear infinite' }} /> BUILDING YOUR LOOK...
-                      </>
-                    ) : isActive ? (
-                      <>
-                        <Check size={16}/> ACTIVE LOOK
                       </>
                     ) : (
                       <>
