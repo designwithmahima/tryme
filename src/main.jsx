@@ -528,7 +528,11 @@ function App() {
       {showRedirect && (
         <div className="redirect-backdrop" role="presentation" onMouseDown={cancelRedirect}>
           <section className="redirect-dialog" role="dialog" aria-modal="true" aria-labelledby="redirect-title" onMouseDown={(event) => event.stopPropagation()}>
-            <div className="redirect-dialog-hanger"><div className="hanger-hook"></div><div className="hanger-body"></div></div>
+            <svg viewBox="0 0 200 70" className="redirect-dialog-hanger" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 100,22 V 14 C 100,9 104,5 109,5 C 114,5 118,9 118,14 C 118,18 114,20 110,21" fill="none" stroke="var(--pink)" strokeWidth="3.5" strokeLinecap="round" />
+              <path d="M 20,62 C 50,48 72,37 90,32 C 93,25 96,22 100,22 C 104,22 107,25 110,32 C 128,37 150,48 180,62 C 183,63.5 183,65.5 180,66 C 150,56 125,52 100,52 C 75,52 50,56 20,66 C 17,65.5 17,63.5 20,62 Z" fill="var(--pink)" />
+              <circle cx="100" cy="30" r="3" fill="#fffafc" />
+            </svg>
             <button className="redirect-close" aria-label="Cancel redirect" onClick={cancelRedirect}><X size={19}/></button>
             <div className="redirect-count" aria-live="polite">{redirectCount}</div>
             <small>LEAVING DRESS ME AI</small>
