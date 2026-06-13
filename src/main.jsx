@@ -69,7 +69,8 @@ function DeviceFrame({ className, children }) {
   )
 }
 
-function PhoneShowcase({ look, loading, onGenerate }) {
+function InteractivePhone({ look, loading, onGenerate }) {
+  const [screen, setScreen] = useState('welcome')
   const categories = [
     ['Office', 'Linen blazer'],
     ['Casual', 'Denim'],
@@ -77,53 +78,82 @@ function PhoneShowcase({ look, loading, onGenerate }) {
     ['Dinner', 'Skirt & top'],
   ]
 
+  useEffect(() => {
+    if (loading) setScreen('result')
+  }, [loading])
+
+  const startStyling = () => {
+    setScreen('result')
+    onGenerate()
+  }
+
   return (
-    <div className="phone-showcase">
-      <DeviceFrame className="welcome-device">
-        <div className="welcome-brand">Dress Me <i>AI</i><small>GET READY IN 3 SECONDS</small></div>
-        <img className="welcome-model" src={looks[0].image} alt="" />
-        <button onClick={onGenerate}>Get Started</button>
+    <div className="single-phone-demo">
+      <DeviceFrame className={`interactive-device screen-${screen}`}>
+        {screen === 'welcome' && (
+          <div className="app-welcome">
+            <div className="welcome-brand">Dress Me <i>AI</i><small>GET READY IN 3 SECONDS</small></div>
+            <img className="welcome-model" src={`${import.meta.env.BASE_URL}reference-hero.png`} alt="Mahima's original Dress Me AI model" />
+            <button onClick={() => setScreen('dashboard')}>Get Started</button>
+          </div>
+        )}
+
+        {screen === 'dashboard' && (
+          <div className="app-dashboard">
+            <div className="dashboard-head">
+              <span>Good Morning Mahima!</span>
+              <small>Delhi 28°C</small>
+            </div>
+            <div className="ready-card">
+              <Sparkles size={24}/>
+              <strong>GET READY IN 3 SECONDS</strong>
+              <span>Let AI curate your perfect look based on today's events and weather.</span>
+              <button onClick={startStyling}>Start Styling</button>
+            </div>
+            <div className="suggestion-title"><b>Today's Suggestion</b><span>View closet</span></div>
+            <div className="category-list">
+              {categories.map(([title, detail], index) => (
+                <button key={title} onClick={startStyling}>
+                  <span className={`category-thumb category-${index + 1}`}/>
+                  <p><b>{title}</b><small>{detail}</small></p>
+                  <ChevronRight size={15}/>
+                </button>
+              ))}
+            </div>
+            <div className="dashboard-nav"><Heart size={17}/><span><Sparkles size={20}/></span><ShoppingBag size={17}/></div>
+          </div>
+        )}
+
+        {screen === 'result' && (
+          <div className="app-result">
+            <div className="result-head">
+              <button aria-label="Back to suggestions" onClick={() => setScreen('dashboard')}>←</button>
+              <p>Dress Me AI<small>CURATED FOR YOU</small></p>
+              <Heart size={16}/>
+            </div>
+            <h3>{loading ? 'Creating your look...' : "Today's Best Look"}</h3>
+            <div className={`result-look ${loading ? 'is-loading' : ''}`}>
+              <img src={look.image} alt={look.title}/>
+              {loading && <div className="scan-line"/>}
+              <span className="look-chip chip-one">✦</span>
+              <span className="look-chip chip-two">▱</span>
+              {!loading && <div className="result-label"><small>{look.label}</small><strong>{look.title}</strong></div>}
+            </div>
+            <div className="result-actions">
+              <button onClick={onGenerate} disabled={loading}>{loading ? 'Styling...' : 'Regenerate'}</button>
+              <button><Heart size={14}/> Save look</button>
+            </div>
+          </div>
+        )}
       </DeviceFrame>
 
-      <DeviceFrame className="dashboard-device">
-        <div className="dashboard-head">
-          <span>Good Morning Mahima!</span>
-          <small>Delhi 28°C</small>
-        </div>
-        <div className="ready-card">
-          <Sparkles size={18}/>
-          <strong>GET READY IN 3 SECONDS</strong>
-          <span>Let AI curate your perfect look based on today's events and weather.</span>
-          <button onClick={onGenerate}>Start Styling</button>
-        </div>
-        <div className="suggestion-title"><b>Today's Suggestion</b><span>View closet</span></div>
-        <div className="category-list">
-          {categories.map(([title, detail]) => (
-            <div key={title}><span className="category-thumb"/><p><b>{title}</b><small>{detail}</small></p><ChevronRight size={12}/></div>
-          ))}
-        </div>
-        <div className="dashboard-nav"><Heart size={13}/><span><Sparkles size={15}/></span><ShoppingBag size={13}/></div>
-      </DeviceFrame>
-
-      <DeviceFrame className="result-device">
-        <div className="result-head">
-          <span>←</span><p>Dress Me AI<small>CURATED FOR YOU</small></p><Heart size={13}/>
-        </div>
-        <h3>{loading ? 'Creating your look...' : "Today's Best Look"}</h3>
-        <div className={`result-look ${loading ? 'is-loading' : ''}`}>
-          <img src={look.image} alt={look.title}/>
-          {loading && <div className="scan-line"/>}
-          <span className="look-chip chip-one">✦</span>
-          <span className="look-chip chip-two">▱</span>
-        </div>
-        <div className="result-actions">
-          <button onClick={onGenerate} disabled={loading}>{loading ? 'Styling...' : 'Regenerate'}</button>
-          <button><Heart size={11}/> Save look</button>
-        </div>
-      </DeviceFrame>
-
-      <div className="demo-orbit demo-orbit-one">AI</div>
-      <div className="demo-orbit demo-orbit-two"><Heart size={15} fill="currentColor"/></div>
+      <div className="demo-orbit single-orbit-one">AI</div>
+      <div className="demo-orbit single-orbit-two"><Heart size={15} fill="currentColor"/></div>
+      <div className="screen-dots" aria-label={`Current app screen: ${screen}`}>
+        {['welcome', 'dashboard', 'result'].map((item) => (
+          <button key={item} className={screen === item ? 'active' : ''} aria-label={`Show ${item} screen`} onClick={() => setScreen(item)}/>
+        ))}
+      </div>
     </div>
   )
 }
@@ -311,7 +341,7 @@ function App() {
         </div>
         <div className="hero-visual">
           <div className="three">{loading ? count : '3'}</div>
-          <PhoneShowcase look={look} loading={loading} onGenerate={generate} />
+          <InteractivePhone look={look} loading={loading} onGenerate={generate} />
           <div className="seconds">SECONDS<br/><span>TO FEEL GOOD</span></div>
         </div>
         <a href="#how" className="scroll">SCROLL TO DISCOVER <ArrowDown size={16}/></a>
