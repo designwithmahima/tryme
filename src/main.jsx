@@ -495,7 +495,12 @@ function App() {
     setLoading(true)
     setCount(3)
     setPhoneRequest((current) => current + 1)
-    document.querySelector('.hero-visual')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const isMobile = window.innerWidth <= 900;
+    if (isMobile) {
+      document.querySelector('.hero-visual')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      document.getElementById('top')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   const look = featuredLook || looks[lookIndex]
