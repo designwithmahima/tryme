@@ -13,6 +13,11 @@ const looks = [
     detail: 'Polished tailoring with a warm modern finish.',
     image: `${import.meta.env.BASE_URL}assets/app/office-look.webp`,
     color: '#dc3e82',
+    details: {
+      main: 'Structured blazer & cream trousers',
+      acc: 'Tan leather tote & classic loafers',
+      why: 'Polished yet warm workwear look'
+    }
   },
   {
     label: 'EVENING',
@@ -20,6 +25,11 @@ const looks = [
     detail: 'Satin, sharp lines, and effortless evening energy.',
     image: `${import.meta.env.BASE_URL}assets/app/evening-look.webp`,
     color: '#f2a7c8',
+    details: {
+      main: 'Satin draping evening top & skirt',
+      acc: 'Delicate gold chain & matching heels',
+      why: 'Sleek fluid movements for night out'
+    }
   },
   {
     label: 'POWER LOOK',
@@ -27,38 +37,141 @@ const looks = [
     detail: 'Confident monochrome for a statement arrival.',
     image: `${import.meta.env.BASE_URL}assets/app/welcome-model.webp`,
     color: '#ef4b8f',
+    details: {
+      main: 'Asymmetric clean-cut jumpsuit',
+      acc: 'Classic clutch & statement pumps',
+      why: 'Confident, high-contrast presence'
+    }
   },
 ]
 
-const shopLooks = [
+const wardrobeItems = [
   {
-    name: 'After Dark',
-    mood: 'Night out',
-    label: 'NIGHT OUT',
-    detail: 'Sculptural tailoring for an elegant late-night entrance.',
-    image: `${import.meta.env.BASE_URL}assets/app/shop-after-dark.webp`,
+    id: 1,
+    name: 'Classic White Blazer',
+    category: 'Outerwear',
+    mood: 'Work Mode',
+    label: 'QUIET LUXURY BLAZER',
+    detail: 'Double-breasted white blazer with structured lapels and a tailored waist.',
+    image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d9c1bb1ec8191b40a62f95e5157df.png`,
+    matchingOutfit: {
+      label: 'OFFICE EDIT',
+      title: 'Soft Structure',
+      detail: 'Polished tailoring with neutral tones and a modern warm finish.',
+      image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d97ae1c548191a807f323a9d80f45.png`,
+      color: '#dc3e82',
+      details: {
+        main: 'White double-breasted blazer & tan trousers',
+        acc: 'Tan leather hand bag & cream loafers',
+        why: 'Sophisticated professional color blocking'
+      }
+    }
   },
   {
-    name: 'Soft Structure',
-    mood: 'Work mode',
-    label: 'WORK MODE',
-    detail: 'Quiet luxury layers with effortless authority.',
-    image: `${import.meta.env.BASE_URL}assets/app/shop-soft-structure.webp`,
+    id: 2,
+    name: 'Asymmetric Black Dress',
+    category: 'One-Piece',
+    mood: 'Night Out',
+    label: 'LITTLE BLACK DRESS',
+    detail: 'A modern sculptural silhouette with an elegant wrap shoulder drape.',
+    image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d9bbe76408191bf93ad9e584b625f.png`,
+    matchingOutfit: {
+      label: 'NIGHT OUT EDIT',
+      title: 'After Dark',
+      detail: 'Sculptural black dress styled for an elegant late-night statement.',
+      image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d975d9a548191b016b0f4a3ba63d8.png`,
+      color: '#0b0b0b',
+      details: {
+        main: 'Asymmetric draped black midi dress',
+        acc: 'Silver metallic drop earrings & mini clutch',
+        why: 'Dramatic clean silhouette for night events'
+      }
+    }
   },
   {
-    name: 'Pink Energy',
-    mood: 'Main character',
-    label: 'MAIN CHARACTER',
-    detail: 'Joyful colour and a silhouette that owns the room.',
-    image: `${import.meta.env.BASE_URL}assets/app/shop-pink-energy.webp`,
+    id: 3,
+    name: 'Pink Wrap Dress',
+    category: 'One-Piece',
+    mood: 'Main Character',
+    label: 'VIBRANT WRAP DRESS',
+    detail: 'Draped wrap design featuring bold flutter sleeves and a cinched belt.',
+    image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d9c7b3c0c819192017db76485cd0a.png`,
+    matchingOutfit: {
+      label: 'COCKTAIL EDIT',
+      title: 'Pink Energy',
+      detail: 'Joyful colour and a silhouette that effortlessly owns the room.',
+      image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d983b87908191aa87f046edea2700.png`,
+      color: '#ef4b8f',
+      details: {
+        main: 'Fuschia pink draped cocktail wrap dress',
+        acc: 'Blush pink leather handbag & matching stilettos',
+        why: 'High-contrast monochrome elegance'
+      }
+    }
   },
   {
-    name: 'Street Smart',
-    mood: 'Off duty',
-    label: 'OFF DUTY',
-    detail: 'Relaxed denim and leather with clean urban confidence.',
-    image: `${import.meta.env.BASE_URL}assets/app/shop-street-smart.webp`,
+    id: 4,
+    name: 'Leather Jacket & Denim',
+    category: 'Off Duty',
+    mood: 'Street Smart',
+    label: 'OFF DUTY UNIFORM',
+    detail: 'Cropped black leather jacket paired with relaxed dark wash denim jeans.',
+    image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d9cdd12f0819193a320ffbe523af3.png`,
+    matchingOutfit: {
+      label: 'OFF DUTY EDIT',
+      title: 'Street Smart',
+      detail: 'Relaxed biker jacket and denim styling with clean urban confidence.',
+      image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d98b3b3708191bf90963a5c85dd91.png`,
+      color: '#1b1b1b',
+      details: {
+        main: 'Cropped leather jacket & relaxed fit jeans',
+        acc: 'Classic chain strap shoulder bag & white trainers',
+        why: 'Edgy modern contrast built for comfort'
+      }
+    }
   },
+  {
+    id: 5,
+    name: 'Classic Leather Bag',
+    category: 'Accessories',
+    mood: 'Everyday Luxe',
+    label: 'PREMIUM LEATHER BAG',
+    detail: 'Warm tan leather structured bag alongside a gold textured evening clutch.',
+    image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d9d40a7a08191a454e9b4ad6e7fb3.png`,
+    matchingOutfit: {
+      label: 'DAILY LUXE EDIT',
+      title: 'Soft Tailoring',
+      detail: 'Blue blazer layered over a clean cami and caramel midi skirt.',
+      image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d91d50d2081918e994139e9f2051d.png`,
+      color: '#f2a7c8',
+      details: {
+        main: 'Pastel blue blazer & warm caramel midi skirt',
+        acc: 'Tan leather handbag & silk neck scarf',
+        why: 'Quiet luxury color layering'
+      }
+    }
+  },
+  {
+    id: 6,
+    name: 'Heels & Accessories',
+    category: 'Accessories',
+    mood: 'Modern Chic',
+    label: 'PREMIUM FOOTWEAR',
+    detail: 'Sleek black pointed heels, cream loafers, and golden chain jewelry.',
+    image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d9da98c44819193ace6e8f6ffd580.png`,
+    matchingOutfit: {
+      label: 'POWER LOOK EDIT',
+      title: 'Midnight Tailoring',
+      detail: 'Confident monochrome jumpsuit styled with classic statement footwear.',
+      image: `${import.meta.env.BASE_URL}assets/generated/ig_0e8f2e92975aaf64016a2d91987f9c8191b911d38436630e57.png`,
+      color: '#ef4b8f',
+      details: {
+        main: 'Asymmetric black tailor-cut jumpsuit',
+        acc: 'Black pointed pumps & classic gold hoops',
+        why: 'High contrast minimalist profile'
+      }
+    }
+  }
 ]
 
 const DESIGN_STUDY_URL = 'https://www.behance.net/gallery/248535429/Get-ready-in-3-second'
@@ -89,7 +202,7 @@ function DeviceFrame({ className, children }) {
   )
 }
 
-function InteractivePhone({ look, loading, onGenerate, requestId }) {
+function InteractivePhone({ look, loading, onGenerate, requestId, sourceItem }) {
   const [screen, setScreen] = useState('welcome')
   const [saved, setSaved] = useState(false)
   const [liked, setLiked] = useState(false)
@@ -105,6 +218,14 @@ function InteractivePhone({ look, loading, onGenerate, requestId }) {
   useEffect(() => {
     if (loading) setScreen('result')
   }, [loading])
+
+  useEffect(() => {
+    if (look && look.label) {
+      const cat = look.label.replace(' EDIT', '');
+      const formattedCat = cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase();
+      setSelectedCategory(formattedCat);
+    }
+  }, [look])
 
   useEffect(() => {
     if (!requestId) return
@@ -187,16 +308,28 @@ function InteractivePhone({ look, loading, onGenerate, requestId }) {
               <span><CalendarDays size={12}/> Evening plans</span>
             </div>
             <div className={`result-look ${loading ? 'is-loading' : ''}`}>
-              <img src={look.image} alt={look.title}/>
+              <img 
+                src={(loading && sourceItem) ? sourceItem.image : look.image} 
+                alt={(loading && sourceItem) ? sourceItem.name : look.title} 
+              />
               {loading && <div className="scan-line"/>}
               <span className="look-chip chip-one">✦</span>
               <button className="look-chip chip-two" aria-label="Show outfit details" onClick={() => setDetailsOpen(!detailsOpen)}><Info size={14}/></button>
               {!loading && <div className="result-label"><small>{look.label}</small><strong>{look.title}</strong></div>}
               {detailsOpen && (
                 <div className="outfit-sheet">
-                  <div><span className="swatch swatch-one"/><p><b>Main piece</b><small>Tailored silhouette</small></p></div>
-                  <div><span className="swatch swatch-two"/><p><b>Accessories</b><small>Warm metallic accents</small></p></div>
-                  <div><span className="swatch swatch-three"/><p><b>Why it works</b><small>Balanced for your plans</small></p></div>
+                  <div>
+                    <span className="swatch swatch-one" style={look.color ? { background: look.color } : {}}/>
+                    <p><b>Main piece</b><small>{look.details ? look.details.main : 'Tailored silhouette'}</small></p>
+                  </div>
+                  <div>
+                    <span className="swatch swatch-two"/>
+                    <p><b>Accessories</b><small>{look.details ? look.details.acc : 'Warm metallic accents'}</small></p>
+                  </div>
+                  <div>
+                    <span className="swatch swatch-three"/>
+                    <p><b>Why it works</b><small>{look.details ? look.details.why : 'Balanced for your plans'}</small></p>
+                  </div>
                 </div>
               )}
             </div>
@@ -232,10 +365,14 @@ function App() {
   const [redirectCount, setRedirectCount] = useState(3)
   const [featuredLook, setFeaturedLook] = useState(null)
   const [phoneRequest, setPhoneRequest] = useState(0)
+  const [buildingItemId, setBuildingItemId] = useState(null)
+  const [activeWardrobeItemId, setActiveWardrobeItemId] = useState(null)
 
   const generate = () => {
     if (loading) return
     setFeaturedLook(null)
+    setBuildingItemId(null)
+    setActiveWardrobeItemId(null)
     setLoading(true)
     setCount(3)
   }
@@ -246,15 +383,19 @@ function App() {
       setCount((current) => {
         if (current <= 1) {
           clearInterval(timer)
-          setLookIndex((index) => (index + 1) % looks.length)
+          if (buildingItemId === null) {
+            setLookIndex((index) => (index + 1) % looks.length)
+          } else {
+            setBuildingItemId(null)
+          }
           setLoading(false)
           return 3
         }
         return current - 1
       })
-    }, 650)
+    }, 1000)
     return () => clearInterval(timer)
-  }, [loading])
+  }, [loading, buildingItemId])
 
   useEffect(() => {
     const revealObserver = new IntersectionObserver((entries) => {
@@ -350,15 +491,14 @@ function App() {
   }
 
   const buildLook = (item) => {
-    setFeaturedLook({
-      label: item.label,
-      title: item.name,
-      detail: item.detail,
-      image: item.image,
-      color: '#ef4b8f',
-    })
+    if (loading) return
+    setActiveWardrobeItemId(item.id)
+    setBuildingItemId(item.id)
+    setFeaturedLook(item.matchingOutfit)
+    setLoading(true)
+    setCount(3)
     setPhoneRequest((current) => current + 1)
-    document.getElementById('top')?.scrollIntoView({ behavior: 'smooth' })
+    document.querySelector('.hero-visual')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
   const look = featuredLook || looks[lookIndex]
@@ -391,6 +531,7 @@ function App() {
       {showRedirect && (
         <div className="redirect-backdrop" role="presentation" onMouseDown={cancelRedirect}>
           <section className="redirect-dialog" role="dialog" aria-modal="true" aria-labelledby="redirect-title" onMouseDown={(event) => event.stopPropagation()}>
+            <div className="redirect-dialog-grommets"><span></span><span></span></div>
             <button className="redirect-close" aria-label="Cancel redirect" onClick={cancelRedirect}><X size={19}/></button>
             <div className="redirect-count" aria-live="polite">{redirectCount}</div>
             <small>LEAVING DRESS ME AI</small>
@@ -417,7 +558,13 @@ function App() {
         </div>
         <div className="hero-visual">
           <div className="three">{loading ? count : '3'}</div>
-          <InteractivePhone look={look} loading={loading} onGenerate={generate} requestId={phoneRequest} />
+          <InteractivePhone 
+            look={look} 
+            loading={loading} 
+            onGenerate={generate} 
+            requestId={phoneRequest} 
+            sourceItem={wardrobeItems.find(x => x.id === activeWardrobeItemId)} 
+          />
           <div className="seconds">SECONDS<br/><span>TO FEEL GOOD</span></div>
         </div>
         <a href="#how" className="scroll">SCROLL TO DISCOVER <ArrowDown size={16}/></a>
@@ -459,8 +606,8 @@ function App() {
       <section className="shop" id="looks">
         <div className="shop-head reveal">
           <div>
-            <div className="section-tag">SHOPPING ENERGY / ZERO CHECKOUT</div>
-            <h2>SHOP THE <i>MOOD.</i></h2>
+            <div className="section-tag">YOUR CLOSET / AI MATCHING</div>
+            <h2>WARDROBE <i>BUILDER.</i></h2>
           </div>
           <div className="shop-controls">
             <button aria-label="Previous looks" onClick={() => scrollShop(-1)}><ArrowLeft /></button>
@@ -468,20 +615,45 @@ function App() {
           </div>
         </div>
         <div className="shop-track">
-          {shopLooks.map((item, index) => (
-            <article className="product-card reveal" key={item.name}>
-              <div className="product-image">
-                <img src={item.image} alt={item.name} />
-                <span>0{index + 1}</span>
-                <button aria-label={`Save ${item.name}`}><Heart size={18}/></button>
-                <button className="quick-view" onClick={() => buildLook(item)}><ShoppingBag size={16}/> BUILD THIS LOOK</button>
-              </div>
-              <div className="product-info">
-                <div><small>{item.mood}</small><h3>{item.name}</h3></div>
-                <ArrowUpRight />
-              </div>
-            </article>
-          ))}
+          {wardrobeItems.map((item, index) => {
+            const isBuilding = buildingItemId === item.id;
+            const isActive = activeWardrobeItemId === item.id;
+            return (
+              <article className={`product-card reveal ${isBuilding ? 'building' : ''} ${isActive ? 'active' : ''}`} key={item.id}>
+                <div className="product-image">
+                  <img src={item.image} alt={item.name} />
+                  <span>0{index + 1}</span>
+                  <button aria-label={`Save ${item.name}`}><Heart size={18}/></button>
+                  <button 
+                    className={`quick-view ${isBuilding ? 'is-building' : ''} ${isActive ? 'is-active' : ''}`} 
+                    onClick={() => buildLook(item)}
+                    disabled={loading}
+                  >
+                    {isBuilding ? (
+                      <>
+                        <Sparkles size={16} className="animate-spin" style={{ animation: 'spin 1.5s linear infinite' }} /> BUILDING YOUR LOOK...
+                      </>
+                    ) : isActive ? (
+                      <>
+                        <Check size={16}/> ACTIVE LOOK
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingBag size={16}/> STYLE WITH THIS
+                      </>
+                    )}
+                  </button>
+                </div>
+                <div className="product-info">
+                  <div>
+                    <small>{item.mood} · {item.category}</small>
+                    <h3>{item.name}</h3>
+                  </div>
+                  <ArrowUpRight />
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
