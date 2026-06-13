@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronRight, Heart, Menu, ShoppingBag, Sparkles, WandSparkles, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronRight, Download, Heart, Menu, ShoppingBag, Sparkles, WandSparkles, X } from 'lucide-react'
+import { registerSW } from 'virtual:pwa-register'
 import './styles.css'
+
+registerSW({ immediate: true })
 
 const looks = [
   {
@@ -88,6 +91,8 @@ function App() {
   const [lookIndex, setLookIndex] = useState(0)
   const [loading, setLoading] = useState(false)
   const [count, setCount] = useState(3)
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [isInstalled, setIsInstalled] = useState(false)
 
   const generate = () => {
     if (loading) return
@@ -135,6 +140,35 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone
+    setIsInstalled(Boolean(standalone))
+
+    const captureInstallPrompt = (event) => {
+      event.preventDefault()
+      setInstallPrompt(event)
+    }
+    const markInstalled = () => {
+      setInstallPrompt(null)
+      setIsInstalled(true)
+    }
+
+    window.addEventListener('beforeinstallprompt', captureInstallPrompt)
+    window.addEventListener('appinstalled', markInstalled)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', captureInstallPrompt)
+      window.removeEventListener('appinstalled', markInstalled)
+    }
+  }, [])
+
+  const installApp = async () => {
+    if (!installPrompt) return
+    await installPrompt.prompt()
+    await installPrompt.userChoice
+    setInstallPrompt(null)
+    setMenuOpen(false)
+  }
+
   const scrollShop = (direction) => {
     document.querySelector('.shop-track')?.scrollBy({
       left: direction * Math.min(window.innerWidth * 0.75, 520),
@@ -153,6 +187,9 @@ function App() {
           <a href="#how" onClick={() => setMenuOpen(false)}>How it works</a>
           <a href="#story" onClick={() => setMenuOpen(false)}>The story</a>
           <a href="#credits" onClick={() => setMenuOpen(false)}>Credits</a>
+          {installPrompt && !isInstalled && (
+            <button className="install-button" onClick={installApp}><Download size={16}/> Install app</button>
+          )}
           <button className="nav-cta" onClick={() => { setMenuOpen(false); generate() }}>TRY THE MAGIC <ArrowUpRight size={15}/></button>
         </nav>
         <button className="menu" aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>

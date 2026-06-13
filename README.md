@@ -22,3 +22,7 @@ The Vite config uses a relative asset base, so the `dist` directory works from a
 The included GitHub Actions workflow builds and deploys the `dist` directory whenever `main` is pushed.
 
 In the repository, open **Settings → Pages** and set **Source** to **GitHub Actions**.
+
+## Progressive Web App
+
+The production build is installable on supported mobile and desktop browsers. It includes app icons, standalone display mode, automatic service-worker updates, offline app-shell caching, and cached fashion imagery.
